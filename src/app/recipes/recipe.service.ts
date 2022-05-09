@@ -1,4 +1,5 @@
 import { Injectable, EventEmitter } from "@angular/core";
+import { Ingredient } from "../shared/ingredient.model";
 import { Recipe } from "./recipe.model";
 
 // @Injectable({
@@ -11,7 +12,8 @@ export class RecipeService {
     new Recipe(
       "Dosa",
       "Tasty Dosa",
-      "https://www.vegrecipesofindia.com/wp-content/uploads/2021/07/dosa-recipe-1.jpg"
+      "https://www.vegrecipesofindia.com/wp-content/uploads/2021/07/dosa-recipe-1.jpg",
+      [new Ingredient("Rawa", 1), new Ingredient("Oil", 1)]
     ),
   ];
 
