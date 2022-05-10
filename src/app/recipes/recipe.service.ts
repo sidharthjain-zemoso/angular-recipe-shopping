@@ -16,6 +16,12 @@ export class RecipeService {
       "https://www.vegrecipesofindia.com/wp-content/uploads/2021/07/dosa-recipe-1.jpg",
       [new Ingredient("Rawa", 1), new Ingredient("Oil", 1)]
     ),
+    new Recipe(
+      "Idli",
+      "Tasty Idli",
+      "https://i0.wp.com/cookingfromheart.com/wp-content/uploads/2016/08/Idli-5.jpg",
+      [new Ingredient("Rawa", 1), new Ingredient("Oil", 1)]
+    ),
   ];
 
   constructor(private shoppingListService: ShoppingListService) {}
