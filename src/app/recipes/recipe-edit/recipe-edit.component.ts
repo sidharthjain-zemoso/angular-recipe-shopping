@@ -1,4 +1,5 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { NgForm } from "@angular/forms";
 import { ActivatedRoute, Params } from "@angular/router";
 
 @Component({
@@ -9,6 +10,7 @@ import { ActivatedRoute, Params } from "@angular/router";
 export class RecipeEditComponent implements OnInit {
   id: number;
   editMode: boolean;
+  @ViewChild("f") recipeForm: NgForm;
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
@@ -16,5 +18,21 @@ export class RecipeEditComponent implements OnInit {
       this.id = params["id"];
       this.editMode = params["id"] != null;
     });
+  }
+
+  onAddIngredient() {
+    //
+  }
+
+  onDeleteIngredient(index: number) {
+    //
+  }
+
+  onCancel() {}
+
+  onSubmit() {}
+
+  getRecipeIngredientsControls() {
+    return [];
   }
 }
