@@ -7,17 +7,24 @@ import { RecipeService } from "../recipes/recipe.service";
   providedIn: "root",
 })
 export class DataStorageService {
+  private baseUrl =
+    "https://angular-course-project-ad1b1-default-rtdb.asia-southeast1.firebasedatabase.app/";
   constructor(private http: HttpClient, private recipeService: RecipeService) {}
 
   storeRecipes() {
     const recipes = this.recipeService.getRecipes();
     this.http
-      .put(
-        "https://angular-course-project-ad1b1-default-rtdb.asia-southeast1.firebasedatabase.app/recipes.json",
-        recipes
-      )
+      .put(this.baseUrl + "recipes.json", recipes)
       .subscribe((response) => {
         console.log(response);
+      });
+  }
+
+  fetchRecipes() {
+    this.http
+      .get<Recipe[]>(this.baseUrl + "recipes.json")
+      .subscribe((recipes) => {
+        this.recipeService.setRecipes(recipes);
       });
   }
 }
