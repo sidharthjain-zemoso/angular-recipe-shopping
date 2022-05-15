@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Subject, throwError } from "rxjs";
+import { BehaviorSubject, Subject, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { User } from "./user.model";
 import { tap } from "rxjs";
@@ -19,7 +19,8 @@ export interface AuthResponseData {
 })
 export class AuthService {
   firebaseApiKey = "AIzaSyBuS9sQFbCWnFQAVbMIZjskrVy1YmZ3ENo";
-  user = new Subject<User>();
+  user = new BehaviorSubject<User>(null);
+
   constructor(private http: HttpClient) {}
 
   signup(email: string, password: string) {
