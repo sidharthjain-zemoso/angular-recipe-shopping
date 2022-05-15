@@ -13,13 +13,13 @@ import { AuthComponent } from "./auth/auth.component";
 import { LoadingSpinnerComponent } from "./shared/loading-spinner/loading-spinner.component";
 import { AuthInterceptorService } from "./auth/auth-interceptor.service";
 import { RecipesModule } from "./recipes/recipes.module";
+import { ShoppingListModule } from "./shopping-list/shopping-list.module";
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    ShoppingListComponent,
-    ShoppingEditComponent,
+
     DropdownDirective,
     AuthComponent,
     LoadingSpinnerComponent,
@@ -32,6 +32,7 @@ import { RecipesModule } from "./recipes/recipes.module";
 
     AppRoutingModule,
     RecipesModule,
+    ShoppingListModule,
   ],
   providers: [
     {
