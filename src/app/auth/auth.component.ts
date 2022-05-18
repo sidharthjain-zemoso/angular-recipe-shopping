@@ -1,41 +1,35 @@
 import {
+  AfterViewInit,
   Component,
   ComponentFactoryResolver,
   OnDestroy,
   OnInit,
   ViewChild,
 } from "@angular/core";
-import { NgForm } from "@angular/forms";
+import { FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
-import { Observable, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 import { AlertComponent } from "../shared/alert/alert.component";
 import { PlaceholderDirective } from "../shared/placeholder/placeholder.directive";
-import { AuthResponseData, AuthService } from "./auth.service";
+import { AuthService } from "./auth.service";
 
 @Component({
   selector: "app-auth",
   templateUrl: "./auth.component.html",
   styleUrls: ["./auth.component.css"],
 })
-export class AuthComponent implements OnInit, OnDestroy {
-  isLoginMode = true;
-  isLoading = false;
-  error: string = null;
-  @ViewChild(PlaceholderDirective, { static: false })
-  alertHost: PlaceholderDirective;
-  private closeSub: Subscription;
-
+export class AuthComponent implements OnInit {
+  isLoginMode: boolean = true;
+  isLoading: boolean = false;
   constructor(
     private authService: AuthService,
-    private router: Router,
-    private componentFactoryResolver: ComponentFactoryResolver
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private router: Router
   ) {}
+  error: string;
+  private closeSub: Subscription;
 
-  ngOnDestroy() {
-    if (this.closeSub) {
-      this.closeSub.unsubscribe();
-    }
-  }
+  @ViewChild(PlaceholderDirective) alertHost: PlaceholderDirective;
 
   ngOnInit(): void {}
 
@@ -43,44 +37,50 @@ export class AuthComponent implements OnInit, OnDestroy {
     this.isLoginMode = !this.isLoginMode;
   }
 
-  onSubmit(form: NgForm) {
-    // console.log(form.value);
-    if (!form.valid) {
-      return;
-    }
-    const email = form.value.email;
-    const password = form.value.password;
-
-    let authObs: Observable<AuthResponseData>;
-    this.isLoading = true;
+  onSubmit(form: FormGroup) {
     if (this.isLoginMode) {
-      authObs = this.authService.login(email, password);
+      this.signInUser(form);
     } else {
-      console.log("Signing up");
-      authObs = this.authService.signup(email, password);
+      this.registerUser(form);
     }
-    authObs.subscribe({
-      next: (resData) => {
-        console.log(resData);
-        this.isLoading = false;
-        this.router.navigate(["/recipes"]);
-      },
-      error: (e) => {
-        console.log(e);
-        this.error = e;
-        this.showErrorAlert(e);
-        this.isLoading = false;
-      },
-    });
-    form.reset();
   }
 
-  onHandleError() {
+  signInUser(form: FormGroup) {
+    let email = form.value.email;
+    let password = form.value.password;
+    this.authService.login(email, password).subscribe(
+      (responseData) => {
+        this.router.navigate(["/recipes"]);
+      },
+      (error) => {
+        console.log(error.message);
+        this.error = "Incorrect Credentials";
+        this.showErrorAlert(this.error);
+      }
+    );
+  }
+
+  registerUser(form: FormGroup) {
+    let email = form.value.email;
+    let password = form.value.password;
+    this.authService.signup(email, password).subscribe(
+      (responseData) => {
+        console.log(responseData);
+      },
+      (error) => {
+        console.log(error.message);
+        this.error = "Incorrect Credentials";
+        this.showErrorAlert(this.error);
+      }
+    );
+  }
+
+  handleError() {
     this.error = null;
   }
 
   private showErrorAlert(message: string) {
-    // const alertCmp = new AlertComponent();
+    console.log(this.alertHost + "Checking");
     const alertCmpFactory =
       this.componentFactoryResolver.resolveComponentFactory(AlertComponent);
     const hostViewContainerRef = this.alertHost.viewContainerRef;
